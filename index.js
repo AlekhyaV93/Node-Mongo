@@ -32,12 +32,18 @@ MongoClient.connect(url, { useUnifiedTopology: true }, (err, client) => {
                 //updating the document
                 dbOperations.updateDocument(db, { name: "Breadcrumb trail campground" }, { description: "Updated the description" }, 'campsites', result => {
                     console.log("Updated document", result.result.nModified);
-                    //removing the document
-                    dbOperations.removeDocument(db, { name: "Breadcrumb trail campground" }, 'campsites', result => {
-                        console.log('Deleted Document Count:', result.deletedCount);
 
-                        client.close();//closing the connection
-                    });
+                    dbOperations.findDocument(db, 'campsites', docs => {
+                        console.log("Found Updated Documents", docs)
+
+                        //removing the document
+                        dbOperations.removeDocument(db, { name: "Breadcrumb trail campground" }, 'campsites', result => {
+                            console.log('Deleted Document Count:', result.deletedCount);
+
+                            client.close();//closing the connection
+                        });
+                    })
+
                 });
             });
 
